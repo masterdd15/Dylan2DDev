@@ -6,7 +6,7 @@ public class CamMove : MonoBehaviour
 {
 
     public GameObject nextCamPosition;
-    public GameObject camera;
+    public GameObject myCamera;
     
     // Start is called before the first frame update
     void Start()
@@ -25,7 +25,7 @@ public class CamMove : MonoBehaviour
         Debug.Log("Detected collision");
         if (collision.tag == "Player") //If our main ball passes through the trigger
         {
-            camera.transform.position = nextCamPosition.transform.position;
+            myCamera.transform.position = nextCamPosition.transform.position;
             Debug.Log("Moved Player");
         }
     }
