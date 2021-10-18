@@ -117,6 +117,7 @@ public class Wanderer : MonoBehaviour
         {
             case Direction.Right:
                 Debug.DrawRay(transform.position + raycastOffset, Vector2.right * raycastDistance, Color.yellow);
+                break;
         }
     }
 
