@@ -66,7 +66,7 @@ public class TreasureMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
+        //rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
         PlayerControls();
     }
 }
