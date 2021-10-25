@@ -39,7 +39,10 @@ public class GravitySwap : MonoBehaviour
     void FixedUpdate()
     {
         rb.AddForce(rb.mass * dirGravity, ForceMode2D.Force);
-        ObjectRotate();
+        if (transform.rotation != Quaternion.Euler(new Vector3(0, 0, targetRot)))
+        {
+            ObjectRotate();
+        }
     }
 
     void GravityChanger()
@@ -68,8 +71,8 @@ public class GravitySwap : MonoBehaviour
 
     void ObjectRotate()
     {
-        //
-        transform.eulerAngles = Vector3.Lerp(transform.rotation.eulerAngles, new Vector3(0, 0, targetRot), Time.deltaTime);
+        //Flip the charcter to face the direction of gravity
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, targetRot));
     }
 
 }

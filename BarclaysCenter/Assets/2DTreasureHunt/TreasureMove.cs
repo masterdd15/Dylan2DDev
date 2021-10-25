@@ -8,6 +8,9 @@ public class TreasureMove : MonoBehaviour
     private Rigidbody2D rb;
     public bool hasKey = false; //Stores if player is holding key
 
+    //GravityController
+    private GravitySwap myGravity;
+
     [SerializeField]
     float jumpStrength = 5.0f;
     float movementSpeed = 5.0f;
@@ -20,6 +23,7 @@ public class TreasureMove : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        myGravity = GetComponent<GravitySwap>();
     }
 
 
@@ -63,10 +67,31 @@ public class TreasureMove : MonoBehaviour
         }
     }
 
+    private void VelocityUpdate()
+    {
+        //We need to decide how to add the movement to the player
+        switch(myGravity.currentDir)
+        {
+            case GravitySwap.Direction.Left:
+                break;
+            case GravitySwap.Direction.Right:
+                break;
+            case GravitySwap.Direction.Up:
+                //Opposite Horizontal Mov, normal Vertical Mov
+                rb.velocity = new Vector2(-1 * (moveX * movementSpeed), rb.velocity.y);
+                break;
+            case GravitySwap.Direction.Down:
+                //Normal Directional Movement
+                rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
+                break;
+        }
+
+    }
+
     // Update is called once per frame
     void Update()
     {
-        //rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
+        rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
         PlayerControls();
     }
 }
