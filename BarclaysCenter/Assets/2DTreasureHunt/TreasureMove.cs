@@ -46,8 +46,30 @@ public class TreasureMove : MonoBehaviour
 
         Debug.Log("Jump");
 
-        rb.AddForce(Vector2.up * jumpStrength, ForceMode2D.Impulse);
-        isGrounded = false;
+        switch (myGravity.currentDir)
+        {
+            case GravitySwap.Direction.Left:
+                //Shoots off in the Right direction
+                rb.AddForce((Vector2.right * jumpStrength), ForceMode2D.Impulse);
+                isGrounded = false;
+                break;
+            case GravitySwap.Direction.Right:
+                //Shoots off in the Left direction
+                rb.AddForce((Vector2.left * jumpStrength), ForceMode2D.Impulse);
+                isGrounded = false;
+                break;
+            case GravitySwap.Direction.Up:
+                //Reversed
+                rb.AddForce(-1 * (Vector2.up * jumpStrength), ForceMode2D.Impulse);
+                isGrounded = false;
+                break;
+            case GravitySwap.Direction.Down:
+                //Normal
+                rb.AddForce(Vector2.up * jumpStrength, ForceMode2D.Impulse);
+                isGrounded = false;
+                break;
+        }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -73,12 +95,16 @@ public class TreasureMove : MonoBehaviour
         switch(myGravity.currentDir)
         {
             case GravitySwap.Direction.Left:
+                //The variables are swapped for the Horizontal movement
+                rb.velocity = new Vector2(rb.velocity.x , -(moveX * movementSpeed));
                 break;
             case GravitySwap.Direction.Right:
+                //Same Horizontal Controls for now (Flip if we flip camera)
+                rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
                 break;
             case GravitySwap.Direction.Up:
-                //Opposite Horizontal Mov, normal Vertical Mov
-                rb.velocity = new Vector2(-1 * (moveX * movementSpeed), rb.velocity.y);
+                //Same Controls for now (Flip if we flip camera)
+                rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
                 break;
             case GravitySwap.Direction.Down:
                 //Normal Directional Movement
@@ -91,7 +117,8 @@ public class TreasureMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
+        VelocityUpdate();
+        //rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
         PlayerControls();
     }
 }

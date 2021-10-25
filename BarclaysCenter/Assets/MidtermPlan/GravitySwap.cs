@@ -32,8 +32,11 @@ public class GravitySwap : MonoBehaviour
 
     private void Update()
     {
-        GravityChanger();
+        GravityChanger();    
     }
+
+    
+
 
     // Update is called once per frame
     void FixedUpdate()
