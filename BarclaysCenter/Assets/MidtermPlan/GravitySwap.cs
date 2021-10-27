@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class GravitySwap : MonoBehaviour
 {
-    public enum Direction { None, Right, Left, Up, Down }
-    public Direction currentDir = Direction.None;
+    public enum Direction { Down, Left, Up, Right}
+    public Direction currentDir = Direction.Down;
+    //Numeric tracker to help us control gravity
+    int tracker;
+
 
     private Rigidbody2D rb;
 
@@ -21,20 +24,83 @@ public class GravitySwap : MonoBehaviour
         //We are going to be creating our own gravity
         rb.gravityScale = 0;
         currentDir = Direction.Down;
+        tracker = 0;
         targetRot = 0;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Initializes what our gravity should be
+        GravityChanger();
     }
 
     private void Update()
     {
-        GravityChanger();    
+        //GravityChanger();    
     }
 
+    //When the Left Mouse Button is clicked
+    //We move 1 space forward on the list
+    public void GravityFoward()
+    {
+        //We need to increase the tracker by one
+        if (tracker != 3) //If were not at the last value, keep increasing
+        {
+            tracker++;
+        }
+        else //Loop back to the start
+        {
+            tracker = 0;
+        }
+
+        TrackerToGravity();
+        GravityChanger();
+        
+    }
+
+    //When the Right Mouse Button is clicked
+    //We move 1 space back on the list
+    public void GravityBackward()
+    {
+        //We need to increase the tracker by one
+        if (tracker != 0) //If were not at the last value, keep increasing
+        {
+            tracker--;
+        }
+        else //Loop back to the start
+        {
+            tracker = 3;
+        }
+
+        TrackerToGravity();
+        GravityChanger();
+    }
+
+    void TrackerToGravity()
+    {
+        //0 = Down
+        //1 = Left
+        //2 = Up
+        //3 = Right
+        switch(tracker)
+        {
+            case 0:
+                currentDir = Direction.Down;
+                break;
+            case 1:
+                currentDir = Direction.Left;
+                break;
+            case 2:
+                currentDir = Direction.Up;
+                break;
+            case 3:
+                currentDir = Direction.Right;
+                break;
+        }
+
+
+    }
     
 
 
@@ -48,7 +114,7 @@ public class GravitySwap : MonoBehaviour
         }
     }
 
-    void GravityChanger()
+    public void GravityChanger()
     {
         switch(currentDir)
         {

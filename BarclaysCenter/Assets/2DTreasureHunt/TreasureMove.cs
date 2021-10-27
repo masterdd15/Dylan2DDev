@@ -34,6 +34,18 @@ public class TreasureMove : MonoBehaviour
             canJump = true;
         }
 
+        //Mouse Gravity method
+        if(Input.GetMouseButtonDown(0)) //Left Click
+        {
+            //If we left click, we move the gravity forward 1
+            myGravity.GravityFoward();
+        }
+
+        if(Input.GetMouseButtonDown(1)) //Right Click
+        {
+            myGravity.GravityBackward();
+        }
+
         moveX = Input.GetAxis("Horizontal");
     }
 
@@ -91,6 +103,9 @@ public class TreasureMove : MonoBehaviour
 
     private void VelocityUpdate()
     {
+        //We first need to save the players current velocity
+        Vector2 finalVelocity = rb.velocity;
+        
         //We need to decide how to add the movement to the player
         switch(myGravity.currentDir)
         {
@@ -118,7 +133,6 @@ public class TreasureMove : MonoBehaviour
     void Update()
     {
         VelocityUpdate();
-        //rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
         PlayerControls();
     }
 }
