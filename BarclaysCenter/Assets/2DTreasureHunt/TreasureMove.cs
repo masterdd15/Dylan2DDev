@@ -10,6 +10,12 @@ public class TreasureMove : MonoBehaviour
 
     //GravityController
     private GravitySwap myGravity;
+    
+    //We need to see if the gravity has changed since the last update
+    bool gravityChangeCheck = false;
+
+    //Stores the final velocity before gravity is switched
+    public Vector2 finalVelocity;
 
     [SerializeField]
     float jumpStrength = 5.0f;
@@ -37,13 +43,23 @@ public class TreasureMove : MonoBehaviour
         //Mouse Gravity method
         if(Input.GetMouseButtonDown(0)) //Left Click
         {
+            //Save the final velocity
+            finalVelocity = rb.velocity;
             //If we left click, we move the gravity forward 1
             myGravity.GravityFoward();
+            //We need to know that the gravity has shifted
+            gravityChangeCheck = true;
+
         }
 
         if(Input.GetMouseButtonDown(1)) //Right Click
         {
+            //Save the final velocity
+            finalVelocity = rb.velocity;
+            //If we right click, we move the gravity backward 1
             myGravity.GravityBackward();
+            //We need to know that the gravity has shifted
+            gravityChangeCheck = true;
         }
 
         moveX = Input.GetAxis("Horizontal");
@@ -89,6 +105,8 @@ public class TreasureMove : MonoBehaviour
         if(collision.gameObject.tag == "Floor")
         {
             isGrounded = true;
+            //We will stop using the previous gravity force once the player lands
+            gravityChangeCheck = false;
         }
     }
 
@@ -101,29 +119,61 @@ public class TreasureMove : MonoBehaviour
         }
     }
 
+
     private void VelocityUpdate()
     {
-        //We first need to save the players current velocity
-        Vector2 finalVelocity = rb.velocity;
         
         //We need to decide how to add the movement to the player
         switch(myGravity.currentDir)
         {
             case GravitySwap.Direction.Left:
                 //The variables are swapped for the Horizontal movement
-                rb.velocity = new Vector2(rb.velocity.x , -(moveX * movementSpeed));
+                if(gravityChangeCheck)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed) + finalVelocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed));
+                }
+                //rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed));
+                //Keep the initial Velocity 
                 break;
             case GravitySwap.Direction.Right:
                 //Same Horizontal Controls for now (Flip if we flip camera)
-                rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
+                if (gravityChangeCheck)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed) + finalVelocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
+                }
+                //rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
                 break;
             case GravitySwap.Direction.Up:
                 //Same Controls for now (Flip if we flip camera)
-                rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
+                if (gravityChangeCheck)
+                {
+                    rb.velocity = new Vector2((moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
+                }
+                //rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
                 break;
             case GravitySwap.Direction.Down:
                 //Normal Directional Movement
-                rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
+                if (gravityChangeCheck)
+                {
+                    rb.velocity = new Vector2((moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
+                }
+                //rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
                 break;
         }
 
