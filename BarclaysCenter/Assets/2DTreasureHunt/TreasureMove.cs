@@ -16,6 +16,9 @@ public class TreasureMove : MonoBehaviour
     public CharacterFlip playerSpriteHolder;
     private float currentControlMove = 0;
 
+    //Audio
+    AudioSource playerAudio;
+
     
     //We need to see if the gravity has changed since the last update
     bool gravityChangeCheck = false;
@@ -34,6 +37,7 @@ public class TreasureMove : MonoBehaviour
 
     private void Awake()
     {
+        playerAudio = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         myGravity = GetComponent<GravitySwap>();
     }
@@ -49,6 +53,8 @@ public class TreasureMove : MonoBehaviour
         //Mouse Gravity method
         if(Input.GetMouseButtonDown(0)) //Left Click
         {
+            //Play sound
+            playerAudio.Play();
             //Save the final velocity
             finalVelocity = rb.velocity;
             //If we left click, we move the gravity forward 1
@@ -60,6 +66,8 @@ public class TreasureMove : MonoBehaviour
 
         if(Input.GetMouseButtonDown(1)) //Right Click
         {
+            //Play sound
+            playerAudio.Play();
             //Save the final velocity
             finalVelocity = rb.velocity;
             //If we right click, we move the gravity backward 1

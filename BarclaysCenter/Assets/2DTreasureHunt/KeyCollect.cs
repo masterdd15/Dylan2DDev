@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class KeyCollect : MonoBehaviour
 {
+    AudioSource keySound;
+
+    private void Awake()
+    {
+        keySound = GetComponent<AudioSource>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +31,7 @@ public class KeyCollect : MonoBehaviour
             collision.GetComponent<TreasureMove>().hasKey = true;
             transform.SetParent(collision.transform, true);
             GetComponent<Collider2D>().enabled = false;
+            keySound.Play();
         }
     }
 }
