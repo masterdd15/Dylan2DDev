@@ -6,7 +6,7 @@ public class TreasureCameraFollow : MonoBehaviour
 {
     public GameObject followObject;
     public Vector2 followOffset;
-    public float speed = 3f;
+    public float speed = 5f;
     private Vector2 threshold;
     private Rigidbody2D rb;
 

@@ -122,62 +122,58 @@ public class TreasureMove : MonoBehaviour
 
     private void VelocityUpdate()
     {
-        
-        //We need to decide how to add the movement to the player
-        switch(myGravity.currentDir)
-        {
-            case GravitySwap.Direction.Left:
-                //The variables are swapped for the Horizontal movement
-                if(gravityChangeCheck)
-                {
-                    rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed) + finalVelocity.y);
-                }
-                else
-                {
-                    rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed));
-                }
-                //rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed));
-                //Keep the initial Velocity 
-                break;
-            case GravitySwap.Direction.Right:
-                //Same Horizontal Controls for now (Flip if we flip camera)
-                if (gravityChangeCheck)
-                {
-                    rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed) + finalVelocity.y);
-                }
-                else
-                {
-                    rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
-                }
-                //rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
-                break;
-            case GravitySwap.Direction.Up:
-                //Same Controls for now (Flip if we flip camera)
-                if (gravityChangeCheck)
-                {
-                    rb.velocity = new Vector2((moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
-                }
-                else
-                {
-                    rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
-                }
-                //rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
-                break;
-            case GravitySwap.Direction.Down:
-                //Normal Directional Movement
-                if (gravityChangeCheck)
-                {
-                    rb.velocity = new Vector2((moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
-                }
-                else
-                {
-                    rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
-                }
-                //rb.velocity = new Vector2(moveX * movementSpeed, rb.velocity.y);
-                break;
-        }
 
+        //If the player is in the air, we need to keep the momentum when they change gravity
+        if (gravityChangeCheck)
+        {
+            switch (myGravity.currentDir)
+            {
+                case GravitySwap.Direction.Left:
+                    //The variables are swapped for the Horizontal movement
+                    rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed) + finalVelocity.y);
+                    //Keep the initial Velocity 
+                    break;
+                case GravitySwap.Direction.Right:
+                    //Same Horizontal Controls for now (Flip if we flip camera)
+                    rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed) + finalVelocity.y);
+                    break;
+                case GravitySwap.Direction.Up:
+                    //Same Controls for now (Flip if we flip camera)
+                    rb.velocity = new Vector2(-(moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
+                    break;
+                case GravitySwap.Direction.Down:
+                    //Normal Directional Movement
+                    rb.velocity = new Vector2((moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
+                    break;
+            }
+
+        }
+        else
+        {
+            //We need to decide how to add the movement to the player
+            switch (myGravity.currentDir)
+            {
+                case GravitySwap.Direction.Left:
+                    //The variables are swapped for the Horizontal movement
+                    rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed));
+                    //Keep the initial Velocity 
+                    break;
+                case GravitySwap.Direction.Right:
+                    //Same Horizontal Controls for now (Flip if we flip camera)
+                    rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
+                    break;
+                case GravitySwap.Direction.Up:
+                    //Same Controls for now (Flip if we flip camera)
+                    rb.velocity = new Vector2(-(moveX * movementSpeed), rb.velocity.y);
+                    break;
+                case GravitySwap.Direction.Down:
+                    //Normal Directional Movement
+                    rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
+                    break;
+            }
+        }
     }
+
 
     // Update is called once per frame
     void Update()
