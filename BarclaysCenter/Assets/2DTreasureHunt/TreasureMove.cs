@@ -10,6 +10,12 @@ public class TreasureMove : MonoBehaviour
 
     //GravityController
     private GravitySwap myGravity;
+
+    //Animator
+    public Animator playerAnimator;
+    public CharacterFlip playerSpriteHolder;
+    private float currentControlMove = 0;
+
     
     //We need to see if the gravity has changed since the last update
     bool gravityChangeCheck = false;
@@ -131,19 +137,23 @@ public class TreasureMove : MonoBehaviour
                 case GravitySwap.Direction.Left:
                     //The variables are swapped for the Horizontal movement
                     rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed) + finalVelocity.y);
+                    currentControlMove = -rb.velocity.y;
                     //Keep the initial Velocity 
                     break;
                 case GravitySwap.Direction.Right:
                     //Same Horizontal Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed) + finalVelocity.y);
+                    currentControlMove = rb.velocity.y;
                     break;
                 case GravitySwap.Direction.Up:
                     //Same Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(-(moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
+                    currentControlMove = -rb.velocity.x;
                     break;
                 case GravitySwap.Direction.Down:
                     //Normal Directional Movement
                     rb.velocity = new Vector2((moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
+                    currentControlMove = rb.velocity.x;
                     break;
             }
 
@@ -156,19 +166,23 @@ public class TreasureMove : MonoBehaviour
                 case GravitySwap.Direction.Left:
                     //The variables are swapped for the Horizontal movement
                     rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed));
+                    currentControlMove = -rb.velocity.y;
                     //Keep the initial Velocity 
                     break;
                 case GravitySwap.Direction.Right:
                     //Same Horizontal Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
+                    currentControlMove = rb.velocity.y;
                     break;
                 case GravitySwap.Direction.Up:
                     //Same Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(-(moveX * movementSpeed), rb.velocity.y);
+                    currentControlMove = -rb.velocity.x;
                     break;
                 case GravitySwap.Direction.Down:
                     //Normal Directional Movement
                     rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
+                    currentControlMove = rb.velocity.x;
                     break;
             }
         }
@@ -180,5 +194,19 @@ public class TreasureMove : MonoBehaviour
     {
         VelocityUpdate();
         PlayerControls();
+
+        //Update animator speed
+        if (isGrounded) //If we are grounded, then we can walk
+        {
+            playerAnimator.SetFloat("Speed", Mathf.Abs(moveX));
+        }
+        else
+        {
+
+        }
+
+        //Flip character depending on sideways velocity
+        playerSpriteHolder.FlipSprite(currentControlMove);
+
     }
 }

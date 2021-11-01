@@ -30,6 +30,6 @@ public class CameraRotate : MonoBehaviour
     void SpinCam()
     {
         //Flip the camera to face the direction of gravity
-        transform.rotation = Quaternion.Lerp(transform.rotation , Quaternion.Euler(0,0, playersGrav.targetRot), Time.time * 0.009f);
+        transform.rotation = Quaternion.Slerp(transform.rotation , Quaternion.Euler(0,0, playersGrav.targetRot),  Time.time * 0.009f);
     }
 }
