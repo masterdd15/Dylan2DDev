@@ -16,6 +16,9 @@ public class TreasureMove : MonoBehaviour
     public CharacterFlip playerSpriteHolder;
     private float currentControlMove = 0;
 
+    //Stores the value of the player moving in the air
+    private float jumpVelocity = 0;
+
     //Audio
     AudioSource playerAudio;
 
@@ -131,6 +134,7 @@ public class TreasureMove : MonoBehaviour
             canJump = false;
             Jump();
         }
+
     }
 
 
@@ -146,22 +150,26 @@ public class TreasureMove : MonoBehaviour
                     //The variables are swapped for the Horizontal movement
                     rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed) + finalVelocity.y);
                     currentControlMove = -rb.velocity.y;
+                    jumpVelocity = rb.velocity.x;
                     //Keep the initial Velocity 
                     break;
                 case GravitySwap.Direction.Right:
                     //Same Horizontal Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed) + finalVelocity.y);
                     currentControlMove = rb.velocity.y;
+                    jumpVelocity = rb.velocity.x;
                     break;
                 case GravitySwap.Direction.Up:
                     //Same Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(-(moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
                     currentControlMove = -rb.velocity.x;
+                    jumpVelocity = rb.velocity.y;
                     break;
                 case GravitySwap.Direction.Down:
                     //Normal Directional Movement
                     rb.velocity = new Vector2((moveX * movementSpeed) + finalVelocity.x, rb.velocity.y);
                     currentControlMove = rb.velocity.x;
+                    jumpVelocity = rb.velocity.y;
                     break;
             }
 
@@ -176,21 +184,25 @@ public class TreasureMove : MonoBehaviour
                     rb.velocity = new Vector2(rb.velocity.x, -(moveX * movementSpeed));
                     currentControlMove = -rb.velocity.y;
                     //Keep the initial Velocity 
+                    jumpVelocity = rb.velocity.x;
                     break;
                 case GravitySwap.Direction.Right:
                     //Same Horizontal Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(rb.velocity.x, (moveX * movementSpeed));
                     currentControlMove = rb.velocity.y;
+                    jumpVelocity = rb.velocity.x;
                     break;
                 case GravitySwap.Direction.Up:
                     //Same Controls for now (Flip if we flip camera)
                     rb.velocity = new Vector2(-(moveX * movementSpeed), rb.velocity.y);
                     currentControlMove = -rb.velocity.x;
+                    jumpVelocity = rb.velocity.y;
                     break;
                 case GravitySwap.Direction.Down:
                     //Normal Directional Movement
                     rb.velocity = new Vector2((moveX * movementSpeed), rb.velocity.y);
                     currentControlMove = rb.velocity.x;
+                    jumpVelocity = rb.velocity.y;
                     break;
             }
         }
@@ -208,13 +220,16 @@ public class TreasureMove : MonoBehaviour
         {
             playerAnimator.SetFloat("Speed", Mathf.Abs(moveX));
         }
-        else
+        else //we are in the air
         {
 
         }
 
+        //Turns on and off jump, and sets if the velocity is up or down
+        playerAnimator.SetBool("offGround", !isGrounded);
+        playerAnimator.SetFloat("yVelocity", jumpVelocity);
+
         //Flip character depending on sideways velocity
         playerSpriteHolder.FlipSprite(currentControlMove);
-
     }
 }
